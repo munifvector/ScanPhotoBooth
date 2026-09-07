@@ -212,7 +212,8 @@ function home() {
    ========================================================= */
 
 async function loadHomeGallery() {
-  const box = $('#homeGallery');
+  const box = document.querySelector('#homeGallery');
+
   if (!box || !db) return;
 
   try {
@@ -224,7 +225,14 @@ async function loadHomeGallery() {
     if (error) throw error;
 
     const imgs = (data || [])
-      .map(p => db.storage.from('event-photos').getPublicUrl(p.storage_path).data.publicUrl)
+      .map(photo => {
+        return db
+          .storage
+          .from('event-photos')
+          .getPublicUrl(photo.storage_path)
+          .data
+          .publicUrl;
+      })
       .filter(Boolean);
 
     prepareGallery(imgs);
@@ -232,48 +240,55 @@ async function loadHomeGallery() {
     if (!imgs.length) {
       box.innerHTML = `
         <div class="gallery-empty">
-          Belum ada foto. Jadilah runner pertama yang mengabadikan race day.
-        </div>`;
+          Belum ada foto peserta.
+        </div>
+      `;
       return;
     }
 
     box.innerHTML = `
-      <div class="gallery-count">
-        <span>${imgs.length}</span> MOMEN DARI PARA RUNNER
-      </div>
+      <div class="home-gallery-grid">
 
-      <div class="home-gallery-grid" aria-label="Galeri foto event">
-        ${imgs.map((u, i) => `
-          <figure class="gallery-item">
+        ${imgs.map((url, index) => `
+          <div class="gallery-item">
+
             <button
-              class="gallery-photo-button"
               type="button"
-              onclick="openGalleryLightbox(${i})"
-              aria-label="Buka foto ${i + 1}">
+              class="gallery-photo-button"
+              onclick="openGalleryLightbox(${index})"
+              aria-label="Lihat foto ${index + 1}"
+            >
+
               <img
-                src="${esc(u)}"
+                src="${esc(url)}"
+                alt="Foto runner ${index + 1}"
                 loading="lazy"
                 decoding="async"
-                alt="Foto runner ${i + 1}">
-              <span class="gallery-photo-overlay">
+              >
+
+              <div class="gallery-photo-overlay">
                 <span>VIEW PHOTO</span>
-              </span>
+              </div>
+
             </button>
-          </figure>
+
+          </div>
         `).join('')}
+
       </div>
     `;
 
-  } catch (e) {
-    console.warn('Galeri halaman depan tidak dapat dimuat:', e);
+  } catch (error) {
+
+    console.error('Gallery error:', error);
 
     box.innerHTML = `
       <div class="gallery-empty">
-        Foto peserta akan tampil setelah ada jepretan yang tersimpan.
-      </div>`;
+        Foto peserta belum tersedia.
+      </div>
+    `;
   }
 }
-
 /* =========================================================
    ADMIN
    ========================================================= */
