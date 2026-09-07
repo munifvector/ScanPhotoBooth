@@ -1,0 +1,9 @@
+{
+  "name":"Memory Image — Wedding Guestbook",
+  "short_name":"Memory Image",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#fbf7f2",
+  "theme_color":"#fbf7f2",
+  "icons":[]
+}
