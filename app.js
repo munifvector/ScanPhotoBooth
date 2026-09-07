@@ -63,20 +63,153 @@ function home(){
 }
 
 async function loadHomeGallery(){
-  const box=$('#homeGallery');
+  const box = $('#homeGallery');
   if(!box || !db) return;
+
   try{
-    const {data,error}=await db.from('photos').select('storage_path,created_at').order('created_at',{ascending:false});
+    const {data,error} = await db
+      .from('photos')
+      .select('storage_path,created_at')
+      .order('created_at',{ascending:false});
+
     if(error) throw error;
-    const imgs=(data||[]).map(p=>db.storage.from('event-photos').getPublicUrl(p.storage_path).data.publicUrl);
-    box.innerHTML=imgs.length
-      ? `<div class="gallery-count">${imgs.length} foto dari para tamu</div><div class="home-gallery-grid">${imgs.map((u,i)=>`<img src="${u}" loading="lazy" alt="Foto tamu ${i+1}">`).join('')}</div>`
-      : '<div class="gallery-empty">Belum ada foto. Jadilah runner pertama yang mengabadikan race day.</div>';
+
+    const imgs = (data||[])
+      .map(p => db.storage
+        .from('event-photos')
+        .getPublicUrl(p.storage_path)
+        .data.publicUrl)
+      .filter(Boolean);
+
+    box.innerHTML = imgs.length
+      ? `
+        <div class="home-gallery-grid">
+          ${imgs.map((u,i)=>`
+            <button
+              type="button"
+              class="gallery-photo-button"
+              onclick="openGalleryLightbox(${i})"
+              aria-label="Lihat foto ${i+1}">
+              <img
+                src="${esc(u)}"
+                loading="lazy"
+                decoding="async"
+                alt="Foto runner ${i+1}">
+              <span class="gallery-photo-overlay">VIEW PHOTO</span>
+            </button>
+          `).join('')}
+        </div>
+      `
+      : `
+        <div class="gallery-empty">
+          Belum ada foto. Jadilah runner pertama yang mengabadikan race day.
+        </div>
+      `;
+
+    window.homeGalleryImages = imgs;
+
   }catch(e){
     console.warn('Galeri halaman depan tidak dapat dimuat:',e);
-    box.innerHTML='<div class="gallery-empty">Foto peserta akan tampil setelah ada jepretan yang tersimpan.</div>';
+    box.innerHTML = `
+      <div class="gallery-empty">
+        Foto peserta akan tampil setelah ada jepretan yang tersimpan.
+      </div>`;
   }
 }
+
+let galleryLightboxIndex = 0;
+
+function openGalleryLightbox(index){
+  const images = window.homeGalleryImages || [];
+  if(!images.length) return;
+
+  galleryLightboxIndex = index;
+
+  let lightbox = document.querySelector('#galleryLightbox');
+
+  if(!lightbox){
+    lightbox = document.createElement('div');
+    lightbox.id = 'galleryLightbox';
+    lightbox.className = 'gallery-lightbox';
+
+    lightbox.innerHTML = `
+      <button class="gallery-lightbox-close" type="button" aria-label="Tutup">×</button>
+      <button class="gallery-lightbox-prev" type="button" aria-label="Sebelumnya">‹</button>
+      <img id="galleryLightboxImage" src="" alt="Preview foto">
+      <button class="gallery-lightbox-next" type="button" aria-label="Berikutnya">›</button>
+      <div id="galleryLightboxCounter" class="gallery-lightbox-counter"></div>
+    `;
+
+    document.body.appendChild(lightbox);
+
+    lightbox.querySelector('.gallery-lightbox-close').onclick = closeGalleryLightbox;
+    lightbox.querySelector('.gallery-lightbox-prev').onclick = galleryPrev;
+    lightbox.querySelector('.gallery-lightbox-next').onclick = galleryNext;
+
+    lightbox.addEventListener('click', e => {
+      if(e.target === lightbox) closeGalleryLightbox();
+    });
+  }
+
+  updateGalleryLightbox();
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateGalleryLightbox(){
+  const images = window.homeGalleryImages || [];
+  const img = document.querySelector('#galleryLightboxImage');
+  const counter = document.querySelector('#galleryLightboxCounter');
+
+  if(!images.length || !img) return;
+
+  img.src = images[galleryLightboxIndex];
+
+  if(counter){
+    counter.textContent =
+      `${galleryLightboxIndex + 1} / ${images.length}`;
+  }
+}
+
+function galleryNext(){
+  const images = window.homeGalleryImages || [];
+  if(!images.length) return;
+
+  galleryLightboxIndex =
+    (galleryLightboxIndex + 1) % images.length;
+
+  updateGalleryLightbox();
+}
+
+function galleryPrev(){
+  const images = window.homeGalleryImages || [];
+  if(!images.length) return;
+
+  galleryLightboxIndex =
+    (galleryLightboxIndex - 1 + images.length) % images.length;
+
+  updateGalleryLightbox();
+}
+
+function closeGalleryLightbox(){
+  const lightbox = document.querySelector('#galleryLightbox');
+
+  if(lightbox){
+    lightbox.classList.remove('active');
+  }
+
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  const lightbox = document.querySelector('#galleryLightbox');
+
+  if(!lightbox?.classList.contains('active')) return;
+
+  if(e.key === 'Escape') closeGalleryLightbox();
+  if(e.key === 'ArrowRight') galleryNext();
+  if(e.key === 'ArrowLeft') galleryPrev();
+});
 
 async function adminPage(){
   if(!isAdmin) return;
