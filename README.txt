@@ -1,27 +1,20 @@
-MEMORY IMAGE — WEDDING GUESTBOOK
+MEMORY IMAGE — PROFESSIONAL RUN EVENT
 
-Perubahan utama:
-- Branding SatuAlbum -> Memory Image.
-- Tema wedding: ivory, rose, gold, serif editorial + sans modern.
-- Semua konten utama dibuat center/terpusat.
-- Teks tamu: "Scan QR Acara".
-- Teks kamera: "Upload foto bahagia mu".
-- Dashboard admin DIHILANGKAN dari halaman utama.
-- Dashboard admin dipisah ke /admin.html.
-- QR admin selalu mengarah ke halaman tamu ./?event=KODE.
-- Preview foto tampil sebelum upload dan memakai blob yang sama dengan file upload.
-- Tetap menggunakan Supabase URL + publishable key yang ada di config.js.
+Tema website sudah diubah dari wedding menjadi tema event lari profesional:
+- Dark navy race-day interface.
+- Accent lime + orange.
+- Tipografi Barlow Condensed + Inter.
+- Gaya visual seperti event organizer / race-day photo platform.
+- Copywriting peserta, scanner, kamera, album, dan admin disesuaikan untuk run event.
+- Fitur Supabase, kamera, QR scanner, upload, album publik, dan dashboard admin tetap dipertahankan.
 - Maksimal 5 foto per sesi.
-- Halaman depan menampilkan SEMUA foto yang tersimpan di tabel photos, dari semua tamu/acara yang dapat dibaca publik.
-- Galeri halaman depan otomatis refresh setiap 10 detik agar foto tamu baru ikut muncul tanpa reload manual.
-- Jika galeri depan kosong karena RLS, jalankan SUPABASE_PUBLIC_GALLERY.sql di Supabase SQL Editor.
 
 DEPLOY NETLIFY
-1. Upload isi folder ini ke site Netlify yang sama.
+1. Upload isi folder ini ke site Netlify.
 2. Pastikan config.js ikut ter-upload.
-3. Halaman tamu: https://DOMAIN.netlify.app/
-4. Dashboard admin: https://DOMAIN.netlify.app/admin.html
-5. QR acara yang dibuat dari admin akan membuka halaman tamu, bukan admin.
+3. Halaman peserta: https://DOMAIN.netlify.app/
+4. Dashboard event: https://DOMAIN.netlify.app/admin.html
+5. QR event dari admin tetap mengarah ke halaman peserta.
 
-CATATAN KEAMANAN
-Memindahkan dashboard ke /admin.html membuatnya tidak tampil di halaman publik, tetapi URL tersembunyi bukan autentikasi. Untuk keamanan produksi, dashboard sebaiknya memakai Supabase Auth/RLS yang membatasi akses admin.
+CATATAN
+Dashboard admin masih menggunakan URL /admin.html dan belum merupakan autentikasi. Untuk produksi, gunakan Supabase Auth/RLS.

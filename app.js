@@ -22,31 +22,31 @@ function home(){
   app.innerHTML = `
   <div class="wrap">
     <section class="hero">
-      <div class="eyebrow">Wedding Guestbook</div>
+      <div class="eyebrow">OFFICIAL RUN EVENT PHOTO</div>
       <h1>Memory Image</h1>
-      <div class="ornament">♡</div>
-      <p class="lead">Abadikan momen bahagia bersama, langsung dari kamera HP kamu.</p>
+      <div class="ornament">RUN • CAPTURE • SHARE</div>
+      <p class="lead">Abadikan energi, perjuangan, dan momen finish kamu langsung dari kamera HP.</p>
     </section>
 
     <section class="card center guest-card">
-      <div class="eyebrow">For Our Guests</div>
-      <h2>Scan QR Acara</h2>
-      <p class="muted">Scan QR acara untuk mulai mengabadikan momen.</p>
-      <button class="action primary" id="scan">Scan QR Acara</button>
-      <button class="action secondary" id="manual">Masukkan Kode Acara</button>
+      <div class="eyebrow">FOR EVERY RUNNER</div>
+      <h2>Masuk ke Run Event</h2>
+      <p class="muted">Scan QR event untuk membuka kamera dan mulai mengabadikan race day.</p>
+      <button class="action primary" id="scan">SCAN QR EVENT</button>
+      <button class="action secondary" id="manual">MASUKKAN KODE EVENT</button>
     </section>
 
     <section class="card center guest-results-card">
-      <div class="eyebrow">Wedding Memories</div>
-      <h3>Hasil Foto Para Tamu</h3>
-      <p class="muted small">Semua foto yang berhasil diabadikan para tamu akan tampil di sini.</p>
-      <div class="home-gallery" id="homeGallery"><div class="gallery-loading">Memuat semua foto kenangan...</div></div>
+      <div class="eyebrow">RUN EVENT GALLERY</div>
+      <h3>Semua Momen Para Runner</h3>
+      <p class="muted small">Foto dari seluruh peserta akan tampil di sini dan diperbarui otomatis.</p>
+      <div class="home-gallery" id="homeGallery"><div class="gallery-loading">Memuat seluruh foto race day...</div></div>
     </section>
 
     <section class="card center upload-card">
       <div class="ornament">✦</div>
-      <h3>Upload foto bahagia mu</h3>
-      <p class="muted small">Setiap tamu dapat mengambil maksimal 5 foto untuk satu sesi.</p>
+      <h3>CAPTURE YOUR RACE DAY</h3>
+      <p class="muted small">Setiap peserta dapat mengambil maksimal 5 foto dalam satu sesi.</p>
     </section>
 
     <div class="footer">Made for beautiful memories · Memory Image</div>
@@ -71,10 +71,10 @@ async function loadHomeGallery(){
     const imgs=(data||[]).map(p=>db.storage.from('event-photos').getPublicUrl(p.storage_path).data.publicUrl);
     box.innerHTML=imgs.length
       ? `<div class="gallery-count">${imgs.length} foto dari para tamu</div><div class="home-gallery-grid">${imgs.map((u,i)=>`<img src="${u}" loading="lazy" alt="Foto tamu ${i+1}">`).join('')}</div>`
-      : '<div class="gallery-empty">Belum ada foto. Jadilah tamu pertama yang mengabadikan momen. ♡</div>';
+      : '<div class="gallery-empty">Belum ada foto. Jadilah runner pertama yang mengabadikan race day.</div>';
   }catch(e){
     console.warn('Galeri halaman depan tidak dapat dimuat:',e);
-    box.innerHTML='<div class="gallery-empty">Foto tamu akan tampil setelah ada jepretan yang tersimpan.</div>';
+    box.innerHTML='<div class="gallery-empty">Foto peserta akan tampil setelah ada jepretan yang tersimpan.</div>';
   }
 }
 
@@ -82,23 +82,23 @@ async function adminPage(){
   if(!isAdmin) return;
   app.innerHTML = `
   <div class="wrap">
-    <div class="topbar"><button class="icon-btn" id="back">←</button><div class="counter">ADMIN</div></div>
+    <div class="topbar"><button class="icon-btn" id="back">←</button><div class="counter">RUN ADMIN</div></div>
     <section class="hero" style="padding-top:8px">
-      <div class="eyebrow">Private Dashboard</div>
+      <div class="eyebrow">EVENT CONTROL CENTER</div>
       <h1 style="font-size:48px">Memory Image</h1>
-      <p class="muted">Kelola acara, QR, dan album.</p>
+      <p class="muted">Kelola run event, QR peserta, dan seluruh galeri foto.</p>
     </section>
     <div class="card">
-      <h2>Buat Acara</h2>
-      <label>Nama acara</label>
-      <input id="name" placeholder="Wedding Ahmad & Siti">
-      <label>Tanggal acara</label>
+      <h2>Buat Run Event</h2>
+      <label>Nama run event</label>
+      <input id="name" placeholder="CITY RUN 10K 2026">
+      <label>Tanggal event</label>
       <input id="date" type="date" value="${today()}">
-      <button class="action primary" id="create">Buat & Generate QR</button>
+      <button class="action primary" id="create">BUAT EVENT & GENERATE QR</button>
     </div>
-    <div class="admin-note">Dashboard admin tidak ditampilkan di halaman tamu. Akses langsung melalui halaman <b>admin.html</b>.</div>
+    <div class="admin-note">Control center tidak ditampilkan di halaman peserta. Akses langsung melalui <b>admin.html</b>.</div>
     <div class="divider"></div>
-    <h2>Acara Saya</h2>
+    <h2>Run Event Saya</h2>
     <div id="events" class="event-list"><div class="notice">Memuat acara...</div></div>
   </div>`;
   $('#back').onclick = backHome;
@@ -138,11 +138,11 @@ function showQR(code, name){
   <div class="wrap">
     <div class="topbar"><button class="icon-btn" onclick="adminPage()">←</button><div class="counter">QR ACARA</div></div>
     <div class="card center">
-      <div class="eyebrow">Scan to capture</div>
+      <div class="eyebrow">SCAN TO CAPTURE</div>
       <h2>${esc(name)}</h2>
       <div class="qrbox" id="qr"></div>
       <h3>${esc(code)}</h3>
-      <p class="muted small">Scan QR ini dari HP tamu. QR mengarah ke halaman tamu, bukan dashboard admin.</p>
+      <p class="muted small">Scan QR ini dari HP peserta. QR mengarah ke halaman peserta, bukan control center.</p>
       <button class="action secondary" onclick="navigator.clipboard?.writeText('${guestUrl.href}');alert('Link acara disalin')">Salin Link Acara</button>
     </div>
   </div>`;
@@ -168,14 +168,14 @@ function cameraPage(){
   <div class="wrap">
     <div class="topbar"><button class="icon-btn" onclick="backHome()">←</button><div class="counter"><span id="left">${MAX}</span> / ${MAX}</div></div>
     <section class="hero" style="padding:8px 8px 18px">
-      <div class="eyebrow">${esc(event.name)}</div>
-      <h2>Upload foto bahagia mu</h2>
-      <p class="muted small">Abadikan momen terbaik di acara ini.</p>
+      <div class="eyebrow">${esc(event.name)} • RUN EVENT</div>
+      <h2>CAPTURE YOUR RACE DAY</h2>
+      <p class="muted small">Finish line, race bib, podium, cheers — abadikan semuanya.</p>
     </section>
     <div class="camera"><video id="video" autoplay playsinline muted></video><div class="shade"></div><div class="counter"><span id="num">${MAX}</span> foto tersisa</div></div>
     <button class="shutter" id="shoot" aria-label="Ambil foto"></button>
-    <div class="row"><button class="action secondary" id="flip">Ganti Kamera</button><button class="action secondary" id="done">Selesai</button></div>
-    <div class="notice">Foto akan tampil sebagai preview lalu otomatis masuk ke album acara. Maksimal ${MAX} jepretan dalam satu sesi.</div>
+    <div class="row"><button class="action secondary" id="flip">GANTI KAMERA</button><button class="action secondary" id="done">SELESAI</button></div>
+    <div class="notice">Foto akan tampil sebagai preview lalu otomatis masuk ke galeri event. Maksimal ${MAX} jepretan dalam satu sesi.</div>
     <div class="thumbs" id="thumbs"></div>
   </div>`;
   startCamera();
@@ -206,7 +206,7 @@ async function startCamera(){
 
 async function take(){
   // Jangan mengunci tombol selama proses upload. Foto berikutnya boleh langsung
-  // diambil; upload berjalan di background dan ditunggu saat tombol Selesai.
+  // diambil; upload berjalan di background dan ditunggu saat tombol SELESAI.
   if(shots.length>=MAX) return alert(`Jatah ${MAX} foto sudah habis.`);
   const v=$('#video');
   const track=stream?.getVideoTracks?.()[0];
@@ -256,7 +256,7 @@ async function take(){
     $('#num').textContent=MAX-shots.length;
     if(shots.length>=MAX && btn) btn.disabled=true;
 
-    // Upload disimpan sebagai promise. Selesai akan menunggu seluruh antrean.
+    // Upload disimpan sebagai promise. SELESAI akan menunggu seluruh antrean.
     const item=shots[shots.length-1];
     item.uploadPromise=(async()=>{
       const {error:upErr}=await db.storage.from('event-photos').upload(path,blob,{
@@ -297,17 +297,17 @@ async function finish(){
   stop(stream);
   const pending=shots.map(s=>s.uploadPromise).filter(Boolean);
   if(pending.length){
-    app.innerHTML=`<div class="wrap"><div class="card center" style="margin-top:15vh"><div class="eyebrow">Saving memories</div><h1 style="font-size:46px">Menyimpan foto…</h1><p class="muted">Tunggu sebentar, semua jepretan sedang disimpan ke album.</p></div></div>`;
+    app.innerHTML=`<div class="wrap"><div class="card center" style="margin-top:15vh"><div class="eyebrow">SAVING RACE MOMENTS</div><h1 style="font-size:46px">MENYIMPAN FOTO…</h1><p class="muted">Tunggu sebentar, seluruh jepretan sedang disimpan ke galeri event.</p></div></div>`;
     await Promise.allSettled(pending);
   }
   const saved=shots.filter(s=>s.uploaded).length;
   const failed=shots.filter(s=>s.uploadError).length;
-  app.innerHTML=`<div class="wrap"><div class="card center" style="margin-top:15vh"><div class="eyebrow">Memory captured</div><h1 style="font-size:52px">Terima kasih ♡</h1><p class="muted">${saved} foto berhasil masuk ke album <b>${esc(event.name)}</b>${failed?`.<br><small>${failed} foto gagal di-upload, silakan ambil ulang.</small>`:'.'}</p><button class="action primary" onclick="backHome()">Kembali</button></div></div>`;
+  app.innerHTML=`<div class="wrap"><div class="card center" style="margin-top:15vh"><div class="eyebrow">RACE MOMENT CAPTURED</div><h1 style="font-size:52px">RACE DAY COMPLETE</h1><p class="muted">${saved} foto berhasil masuk ke album <b>${esc(event.name)}</b>${failed?`.<br><small>${failed} foto gagal di-upload, silakan ambil ulang.</small>`:'.'}</p><button class="action primary" onclick="backHome()">KEMBALI KE GALERI</button></div></div>`;
 }
 
 function scanPage(){
   stop(stream); stop(scanStream);
-  app.innerHTML=`<div class="wrap"><div class="topbar"><button class="icon-btn" onclick="backHome()">←</button><div class="counter">SCAN QR</div></div><div class="hero"><div class="eyebrow">Wedding Guestbook</div><h2>Scan QR Acara</h2><p class="muted">Arahkan kamera ke QR acara.</p></div><div class="scanner"><video id="sv" autoplay playsinline muted></video><canvas id="sc"></canvas><div class="corners"></div></div><div class="notice">Posisikan QR di dalam kotak sampai acara terbuka otomatis.</div><button class="action secondary" onclick="backHome()">Batal</button></div>`;
+  app.innerHTML=`<div class="wrap"><div class="topbar"><button class="icon-btn" onclick="backHome()">←</button><div class="counter">SCAN EVENT</div></div><div class="hero"><div class="eyebrow">OFFICIAL RUN EVENT PHOTO</div><h2>Masuk ke Run Event</h2><p class="muted">Arahkan kamera ke QR event untuk masuk.</p></div><div class="scanner"><video id="sv" autoplay playsinline muted></video><canvas id="sc"></canvas><div class="corners"></div></div><div class="notice">Posisikan QR di dalam kotak sampai event terbuka otomatis.</div><button class="action secondary" onclick="backHome()">BATAL</button></div>`;
   startScan();
 }
 async function startScan(){
@@ -337,7 +337,7 @@ async function adminGallery(id,name){
   const {data,error}=await db.from('photos').select('storage_path,created_at').eq('event_id',id).order('created_at',{ascending:false});
   if(error)return alert(error.message);
   const imgs=(data||[]).map(p=>db.storage.from('event-photos').getPublicUrl(p.storage_path).data.publicUrl);
-  app.innerHTML=`<div class="wrap"><div class="topbar"><button class="icon-btn" onclick="adminPage()">←</button><div class="counter">${imgs.length} FOTO</div></div><div class="hero"><div class="eyebrow">Wedding Album</div><h2>${esc(name)}</h2><p class="muted small">Foto dari semua HP pada acara yang sama.</p></div><div class="gallery">${imgs.map(u=>`<img src="${u}" loading="lazy" alt="Memory Image">`).join('') || '<div class="notice">Belum ada foto.</div>'}</div></div>`;
+  app.innerHTML=`<div class="wrap"><div class="topbar"><button class="icon-btn" onclick="adminPage()">←</button><div class="counter">${imgs.length} FOTO</div></div><div class="hero"><div class="eyebrow">OFFICIAL RUN EVENT ALBUM</div><h2>${esc(name)}</h2><p class="muted small">Foto dari seluruh peserta pada event yang sama.</p></div><div class="gallery">${imgs.map(u=>`<img src="${u}" loading="lazy" alt="Memory Image">`).join('') || '<div class="notice">Belum ada foto.</div>'}</div></div>`;
 }
 
 const q=new URLSearchParams(location.search).get('event');
